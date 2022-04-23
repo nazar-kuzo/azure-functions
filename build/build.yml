@@ -1,0 +1,61 @@
+name: 1.$(Date:yy).$(Date:MMdd)$(Rev:.r)
+
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  projectRoot: 'src'
+  solution: '$(projectRoot)/*.sln'
+  buildConfiguration: 'Release'
+  NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
+
+steps:
+- task: Cache@2
+  displayName: Restore cached NuGet packages
+  inputs:
+    key: v4 | nuget | "$(Agent.OS)" | **/packages.lock.json, !**/bin/**, !**/obj/**
+    restoreKeys: |
+      v4 | nuget | "$(Agent.OS)"
+    path: $(NUGET_PACKAGES)
+    cacheHitVar: cacheRestored
+
+- task: CopyFiles@2
+  displayName: Restore cached obj files
+  condition: ne(variables.cacheRestored, 'false')
+  inputs:
+    contents: '**/obj/**'
+    sourceFolder: '$(NUGET_PACKAGES)/obj'
+    targetFolder: '$(projectRoot)'
+
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  condition: ne(variables.cacheRestored, 'true')
+  inputs:
+    command: restore
+    projects: '$(solution)'
+    verbosityRestore: minimal
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    projects: '$(solution)'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
+
+- task: CopyFiles@2
+  displayName: Store NuGet packages in cache
+  condition: ne(variables.cacheRestored, 'true')
+  inputs:
+    contents: '**/obj/**'
+    sourceFolder: '$(projectRoot)'
+    targetFolder: '$(NUGET_PACKAGES)/obj'
+    overWrite: true
+
+- task: DotNetCoreCLI@2
+  displayName: Publish
+  inputs:
+    command: 'custom'
+    custom: 'nuget'
+    arguments: 'push *\bin\$(buildConfiguration)\*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key $(nugetApiKey)'
+    workingDirectory: '$(projectRoot)'

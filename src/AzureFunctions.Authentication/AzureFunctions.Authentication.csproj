@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1591;NU1605</NoWarn>
+    <DocumentationFile>Properties\Azure.Functions.Authentication.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1591;NU1605</NoWarn>
+    <DocumentationFile>Properties\Azure.Functions.Authentication.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <Authors>Nazar Kuzo</Authors>
+    <Company>Idun Real Estate</Company>
+    <Description>Provides Azure Functions v4 friendly ASP.NET Core Authentication/Authorization</Description>
+    <Copyright>Idun Real Estate - All rights reserved</Copyright>
+    <PackageProjectUrl>https://github.com/nazar-kuzo/azure-functions-authentication</PackageProjectUrl>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/nazar-kuzo/azure-functions-authentication</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageTags>Azure Functions Authentication Authorization</PackageTags>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>AzureFunctions.Authentication</PackageId>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <AssemblyVersion>4.0.1</AssemblyVersion>
+    <FileVersion>4.0.1</FileVersion>
+    <Version>4.0.1</Version>
+    <PackageReleaseNotes>
+      - Added support of Azure Function V4
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.32" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
+    <None Include="readme.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
