@@ -22,11 +22,11 @@
     <Company>Idun Real Estate</Company>
     <Description>Provides Azure Functions friendly ASP.NET Core Authentication/Authorization</Description>
     <Copyright>Idun Real Estate - All rights reserved</Copyright>
-    <PackageProjectUrl>https://github.com/nazar-kuzo/azure-functions-authentication</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/nazar-kuzo/azure-functions</PackageProjectUrl>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
     <PackageIconUrl />
-    <RepositoryUrl>https://github.com/nazar-kuzo/azure-functions-authentication</RepositoryUrl>
+    <RepositoryUrl>https://github.com/nazar-kuzo/azure-functions#azurefunctionsauthentication</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>Azure Functions Authentication Authorization</PackageTags>
     <NeutralLanguage>en-US</NeutralLanguage>

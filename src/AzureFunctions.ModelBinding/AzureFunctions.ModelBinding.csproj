@@ -22,11 +22,11 @@
     <Company>Idun Real Estate</Company>
     <Description>Provides ASP.NET Core MVC model binding for Azure Functions</Description>
     <Copyright>Idun Real Estate - All rights reserved</Copyright>
-    <PackageProjectUrl>https://github.com/nazar-kuzo/azure-functions-model-binding</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/nazar-kuzo/azure-functions</PackageProjectUrl>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
     <PackageIconUrl />
-    <RepositoryUrl>https://github.com/nazar-kuzo/azure-functions-model-binding</RepositoryUrl>
+    <RepositoryUrl>https://github.com/nazar-kuzo/azure-functions#azurefunctionsmvcmodelbinding</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>Azure Functions Model Binding FromQuery FromBody FromForm FromRoute</PackageTags>
     <NeutralLanguage>en-US</NeutralLanguage>
