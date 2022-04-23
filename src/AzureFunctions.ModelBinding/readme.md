@@ -1,32 +1,35 @@
-# azure-functions-model-binding
+## AzureFunctions.MvcModelBinding
 
-Provides ASP.NET Core MVC model binding for Azure Functions v3
+Provides ASP.NET Core MVC model binding for Azure Functions
 
+<https://www.nuget.org/packages/AzureFunctions.MvcModelBinding>
 
-# Problem
+### Problem
 
-Azure Function v3 is lacking of built-in ASP.NET Core MVC Model Binding attributes like [FromQuery], [FromBody], [FromForm].
+Azure Function is lacking of built-in ASP.NET Core MVC Model Binding attributes like [FromQuery], [FromBody], [FromForm].
 
-## Solution
+### Solution
 
 1. Expose custom Model binding attributes derived from ASP.NET Core MVC attributes
-2. Provide custom extension that derives from "IExtensionConfigProvider"
-3. Finish configuration of ASP.NET Core MVC services
-4. Pass data from Azure Function binding attributes to ASP.NET Core MVC model binderand validator
+1. Provide custom extension that derives from `IExtensionConfigProvider`
+1. Finish configuration of ASP.NET Core MVC services
+1. Pass data from Azure Function binding attributes to ASP.NET Core MVC model binderand validator
 
-# Example
+### Example
 
 1. Add MVC Core services by calling `builder.Services.AddMvcCore()`
-2. Register Azure Function Model binding by calling `.AddFunctionModelBinding()`
-3. Add [FromQuery]/[FromBody]/[FromForm] attributes to your function parameters
-```
-[FunctionName(QueryData)
-public object QueryData(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "data")] HttpRequest request,
-    [FromQuery, Required] string filter,
-    [FromBody] object content)
-{
-    // your code goes here
-}
-```
-4. Enjoy 😄
+1. Register Azure Function Model binding by calling `.AddFunctionModelBinding()`
+1. Add [FromQuery]/[FromBody]/[FromForm] attributes to your function parameters
+
+    ```c#
+    [FunctionName("QueryData")]
+    public object QueryData(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "data")] HttpRequest request,
+        [FromQuery, Required] string filter,
+        [FromBody] object content)
+    {
+        // your code goes here
+    }
+    ```
+
+1. Enjoy 😄

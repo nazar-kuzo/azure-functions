@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
@@ -20,7 +20,7 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <Authors>Nazar Kuzo</Authors>
     <Company>Idun Real Estate</Company>
-    <Description>Provides Azure Functions v4 friendly ASP.NET Core Authentication/Authorization</Description>
+    <Description>Provides Azure Functions friendly ASP.NET Core Authentication/Authorization</Description>
     <Copyright>Idun Real Estate - All rights reserved</Copyright>
     <PackageProjectUrl>https://github.com/nazar-kuzo/azure-functions-authentication</PackageProjectUrl>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -33,11 +33,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.Authentication</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.1</AssemblyVersion>
-    <FileVersion>4.0.1</FileVersion>
-    <Version>4.0.1</Version>
+    <AssemblyVersion>4.0.2</AssemblyVersion>
+    <FileVersion>4.0.2</FileVersion>
+    <Version>4.0.2</Version>
     <PackageReleaseNotes>
-      - Added support of Azure Function V4
+      - Added support of .NET 6.0
     </PackageReleaseNotes>
   </PropertyGroup>
 
