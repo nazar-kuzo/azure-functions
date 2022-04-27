@@ -33,9 +33,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.Authentication</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.2</AssemblyVersion>
-    <FileVersion>4.0.2</FileVersion>
-    <Version>4.0.2</Version>
+    <AssemblyVersion>4.0.3</AssemblyVersion>
+    <FileVersion>4.0.3</FileVersion>
+    <Version>4.0.3</Version>
     <PackageReleaseNotes>
       - Added support of .NET 6.0
     </PackageReleaseNotes>

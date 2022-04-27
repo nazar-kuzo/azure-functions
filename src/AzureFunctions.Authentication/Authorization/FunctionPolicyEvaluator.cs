@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Policy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,6 +16,8 @@ namespace Azure.Functions.Authentication.Authorization
     /// </summary>
     internal class FunctionPolicyEvaluator : PolicyEvaluator
     {
+        private readonly IAuthorizationPolicyProvider policyProvider;
+
         public FunctionPolicyEvaluator(
             IAuthorizationPolicyProvider policyProvider,
             IAuthorizationHandlerProvider defaultHandlerProvider,
@@ -28,6 +33,17 @@ namespace Azure.Functions.Authentication.Authorization
                 evaluator,
                 GetAuthorizationOptions(policyProvider)))
         {
+            this.policyProvider = policyProvider;
+        }
+
+        public override async Task<AuthenticateResult> AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
+        {
+            if (policy.AuthenticationSchemes.Count == 0)
+            {
+                policy = new AuthorizationPolicy(policy.Requirements, (await this.policyProvider.GetDefaultPolicyAsync()).AuthenticationSchemes);
+            }
+
+            return await base.AuthenticateAsync(policy, context);
         }
 
         private static IOptions<AuthorizationOptions> AuthorizationOptions { get; set; }
