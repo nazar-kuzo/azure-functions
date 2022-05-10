@@ -38,7 +38,6 @@
     <Version>4.0.4</Version>
     <PackageReleaseNotes>
       - Added support of .NET 6.0
-      - Storing parsed (bound) request body in route values for later reuse
     </PackageReleaseNotes>
   </PropertyGroup>
 

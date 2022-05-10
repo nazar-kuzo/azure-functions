@@ -368,11 +368,12 @@ namespace AzureFunctions.ModelBinding
                                 {
                                     routeData[this.modelBindingContext.ModelName] = value;
                                 }
-                                // store bound request body as route paramater for later value reuse
-                                else if (bindingSourceContext.BinderContext.BindingInfo.BindingSource == BindingSource.Body)
-                                {
-                                    routeData["MS_AzureWebJobs_BoundRequestBody"] = value;
-                                }
+                            }
+
+                            // store bound request body as route paramater for later value reuse
+                            if (bindingSourceContext.BinderContext.BindingInfo.BindingSource == BindingSource.Body)
+                            {
+                                this.modelBindingContext.HttpContext.Items["MS_AzureFunctions_HttpRequestBody"] = value;
                             }
 
                             return value;
