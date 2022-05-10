@@ -361,11 +361,18 @@ namespace AzureFunctions.ModelBinding
                                     ? this.bindingSourceContext.Parameter.DefaultValue
                                     : GetDefaultValueForType(this.bindingSourceContext.Parameter.ParameterType);
 
-                            // updating AzureFunction route values to bypass their default parameter binding by "HttpTriggerAttributeBindingProvider"
-                            if (this.modelBindingContext.HttpContext.Items["MS_AzureWebJobs_HttpRouteData"] is Dictionary<string, object> routeData &&
-                                routeData.ContainsKey(this.modelBindingContext.ModelName))
+                            if (this.modelBindingContext.HttpContext.Items["MS_AzureWebJobs_HttpRouteData"] is Dictionary<string, object> routeData)
                             {
-                                routeData[this.modelBindingContext.ModelName] = value;
+                                // updating AzureFunction route values to bypass their default parameter binding by "HttpTriggerAttributeBindingProvider"
+                                if (routeData.ContainsKey(this.modelBindingContext.ModelName))
+                                {
+                                    routeData[this.modelBindingContext.ModelName] = value;
+                                }
+                                // store bound request body as route paramater for later value reuse
+                                else if (bindingSourceContext.BinderContext.BindingInfo.BindingSource == BindingSource.Body)
+                                {
+                                    routeData["MS_AzureWebJobs_BoundRequestBody"] = value;
+                                }
                             }
 
                             return value;
