@@ -11,7 +11,7 @@ Moreover, predefined Azure Functions `AuthorizationLevel` policies wont work nei
 
 ### Root cause of a problem
 
-Please read this issue to get more context: [https://github.com/Azure/azure-functions-host/issues/6805](https://github.com/Azure/azure-functions-host/issues/6805https://).
+Please read this issue to get more context: [https://github.com/Azure/azure-functions-host/issues/6805](https://github.com/Azure/azure-functions-host/issues/6805).
 
 ### Workaround
 
