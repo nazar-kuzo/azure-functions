@@ -33,11 +33,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.Authentication</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.4</AssemblyVersion>
-    <FileVersion>4.0.4</FileVersion>
-    <Version>4.0.4</Version>
+    <AssemblyVersion>4.0.5</AssemblyVersion>
+    <FileVersion>4.0.5</FileVersion>
+    <Version>4.0.5</Version>
     <PackageReleaseNotes>
       - Added support of .NET 6.0
+      - Updated internal configuration to improve resiliency during host restarts
     </PackageReleaseNotes>
   </PropertyGroup>
 

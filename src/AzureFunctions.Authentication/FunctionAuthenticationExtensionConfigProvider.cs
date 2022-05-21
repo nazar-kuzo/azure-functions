@@ -13,21 +13,20 @@ namespace Azure.Functions.Authentication
     /// </summary>
     internal class FunctionAuthenticationExtensionConfigProvider : IExtensionConfigProvider
     {
+        private static bool initialized = false;
+
         private readonly AuthenticationOptions authenticationOptions;
-        private readonly OptionsConfigurator<AuthenticationOptions> authenticationOptionsConfigurator;
         private readonly OptionsConfigurator<AuthorizationOptions> authorizationOptionsConfigurator;
         private readonly IAuthenticationSchemeProvider schemeProvider;
         private readonly IAuthorizationPolicyProvider policyProvider;
 
         public FunctionAuthenticationExtensionConfigProvider(
             IOptions<AuthenticationOptions> authenticationOptions,
-            OptionsConfigurator<AuthenticationOptions> authenticationOptionsConfigurator,
             OptionsConfigurator<AuthorizationOptions> authorizationOptionsConfigurator,
             IAuthenticationSchemeProvider schemeProvider,
             IAuthorizationPolicyProvider policyProvider)
         {
             this.authenticationOptions = authenticationOptions.Value;
-            this.authenticationOptionsConfigurator = authenticationOptionsConfigurator;
             this.authorizationOptionsConfigurator = authorizationOptionsConfigurator;
             this.schemeProvider = schemeProvider;
             this.policyProvider = policyProvider;
@@ -35,10 +34,22 @@ namespace Azure.Functions.Authentication
 
         public void Initialize(ExtensionConfigContext context)
         {
+            if (initialized)
+            {
+                return;
+            }
+
+            initialized = true;
+
             var authenticationOptions = this.schemeProvider.GetAuthenticationOptions();
 
-            this.authenticationOptionsConfigurator
-                ?.Configure(authenticationOptions);
+            authenticationOptions.DefaultAuthenticateScheme = this.authenticationOptions.DefaultAuthenticateScheme;
+            authenticationOptions.DefaultChallengeScheme = this.authenticationOptions.DefaultChallengeScheme;
+            authenticationOptions.DefaultForbidScheme = this.authenticationOptions.DefaultForbidScheme;
+            authenticationOptions.DefaultScheme = this.authenticationOptions.DefaultScheme;
+            authenticationOptions.DefaultSignInScheme = this.authenticationOptions.DefaultSignInScheme;
+            authenticationOptions.DefaultSignOutScheme = this.authenticationOptions.DefaultSignOutScheme;
+            authenticationOptions.RequireAuthenticatedSignIn = this.authenticationOptions.RequireAuthenticatedSignIn;
 
             this.authorizationOptionsConfigurator
                 ?.Configure(this.policyProvider.GetAuthorizationOptions());
@@ -50,7 +61,7 @@ namespace Azure.Functions.Authentication
                     scheme.DisplayName = newScheme.DisplayName;
                     scheme.HandlerType = newScheme.HandlerType;
                 });
-                
+
                 this.schemeProvider.AddScheme(newScheme.Build());
             }
         }
