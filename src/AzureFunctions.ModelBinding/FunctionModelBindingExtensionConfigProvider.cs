@@ -97,8 +97,9 @@ namespace AzureFunctions.ModelBinding
                         .Any(tag => tag.AttributeType == typeof(Microsoft.Azure.WebJobs.Description.BindingAttribute)));
 
                 var propertyName = bindingSourceAttribute
-                    .ConstructorArguments
-                    .FirstOrDefault()
+                    .NamedArguments
+                    .FirstOrDefault(arg => arg.MemberName == nameof(Bindings.FromQueryAttribute.Name))
+                    .TypedValue
                     .Value
                     ?.ToString() ?? context.Parameter.Name;
 

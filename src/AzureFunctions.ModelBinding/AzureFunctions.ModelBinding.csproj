@@ -33,12 +33,13 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.MvcModelBinding</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.3</AssemblyVersion>
-    <FileVersion>4.0.3</FileVersion>
-    <Version>4.0.3</Version>
+    <AssemblyVersion>4.0.4</AssemblyVersion>
+    <FileVersion>4.0.4</FileVersion>
+    <Version>4.0.4</Version>
     <PackageReleaseNotes>
       - Added support of .NET 6.0
       - Storing parsed (bound) request body in route values for later reuse
+      - Fixed issue with named parameters binding
     </PackageReleaseNotes>
   </PropertyGroup>
 
