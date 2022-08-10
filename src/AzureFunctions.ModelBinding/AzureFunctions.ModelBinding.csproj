@@ -33,13 +33,14 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.MvcModelBinding</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.4</AssemblyVersion>
-    <FileVersion>4.0.4</FileVersion>
-    <Version>4.0.4</Version>
+    <AssemblyVersion>4.0.5</AssemblyVersion>
+    <FileVersion>4.0.5</FileVersion>
+    <Version>4.0.5</Version>
     <PackageReleaseNotes>
       - Added support of .NET 6.0
       - Storing parsed (bound) request body in route values for later reuse
       - Fixed issue with named parameters binding
+      - Added support of JSON values binding from IFormCollection
     </PackageReleaseNotes>
   </PropertyGroup>
 
@@ -51,6 +52,15 @@
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.32" />
   </ItemGroup>
 
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.20" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>

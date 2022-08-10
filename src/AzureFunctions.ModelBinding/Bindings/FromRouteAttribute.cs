@@ -8,7 +8,7 @@ namespace Microsoft.Azure.WebJobs.Extensions.Http
     /// </summary>
     [Binding]
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
-    public class FromRouteAttribute : Attribute
+    public class FromRouteAttribute : Attribute, IModelNameProvider
     {
         public string Name { get; set; }
     }

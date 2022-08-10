@@ -24,5 +24,20 @@
             Specifies that a parameter or property should be bound using route-data from the current request.
             </summary>
         </member>
+        <member name="P:Microsoft.Azure.WebJobs.Extensions.Http.IModelNameProvider.Name">
+            <summary>
+            Mimics MVC ModelBinding attttribute that have ability to override name
+            </summary>
+        </member>
+        <member name="T:AzureFunctions.ModelBinding.ModelBinding.JsonFormValueModelBinderProvider">
+            <summary>
+            Allows to parse JSON values from <see cref="T:Microsoft.AspNetCore.Http.IFormCollection"/>.
+            </summary>
+        </member>
+        <member name="T:AzureFunctions.ModelBinding.ModelBinding.JsonFormValueModelBinder">
+            <summary>
+            Allows to parse JSON values from <see cref="T:Microsoft.AspNetCore.Http.IFormCollection"/>.
+            </summary>
+        </member>
     </members>
 </doc>

@@ -98,7 +98,7 @@ namespace AzureFunctions.ModelBinding
 
                 var propertyName = bindingSourceAttribute
                     .NamedArguments
-                    .FirstOrDefault(arg => arg.MemberName == nameof(Bindings.FromQueryAttribute.Name))
+                    .FirstOrDefault(arg => arg.MemberName == nameof(Bindings.IModelNameProvider.Name))
                     .TypedValue
                     .Value
                     ?.ToString() ?? context.Parameter.Name;
@@ -216,7 +216,7 @@ namespace AzureFunctions.ModelBinding
                         // avoid setting parameter name on body to avoid redundant prefix
                         BinderModelName = avoidSettingBinderModelName
                             ? string.Empty
-                            : context.Parameter.Name,
+                            : bindingSourceContext.ParameterName,
                         BindingSource = bindingSourceContext.Source,
                     },
                 };

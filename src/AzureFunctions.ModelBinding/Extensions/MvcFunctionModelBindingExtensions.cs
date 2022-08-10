@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using AzureFunctions.ModelBinding.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using static AzureFunctions.ModelBinding.FunctionModelBindingExtensionConfigProvider;
 
@@ -11,6 +12,11 @@ namespace Microsoft.Extensions.DependencyInjection
             // add data annotations validation
             builder.Services.AddSingleton<FunctionModelBindingSourceBindingProvider>();
             builder.Services.AddSingleton<IModelMetadataProvider, DefaultModelMetadataProvider>();
+
+            builder.AddMvcOptions(mvcOptions =>
+            {
+                mvcOptions.ModelBinderProviders.Insert(0, new JsonFormValueModelBinderProvider());
+            });
 
             return builder.AddDataAnnotations();
         }
