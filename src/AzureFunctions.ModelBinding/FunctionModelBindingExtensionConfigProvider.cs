@@ -228,6 +228,13 @@ namespace AzureFunctions.ModelBinding
                         return !actionContext.HttpContext.Request.HasFormContentType;
                     };
                 }
+                else if (bindingSourceContext.Source == BindingSource.Form)
+                {
+                    bindingSourceContext.BinderContext.BindingInfo.RequestPredicate = actionContext =>
+                    {
+                        return actionContext.HttpContext.Request.HasFormContentType;
+                    };
+                }
 
                 return bindingSourceContext;
             }

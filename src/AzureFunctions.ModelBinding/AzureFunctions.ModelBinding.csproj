@@ -33,9 +33,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.MvcModelBinding</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.6</AssemblyVersion>
-    <FileVersion>4.0.6</FileVersion>
-    <Version>4.0.6</Version>
+    <AssemblyVersion>4.0.7</AssemblyVersion>
+    <FileVersion>4.0.7</FileVersion>
+    <Version>4.0.7</Version>
     <PackageReleaseNotes>
       - Added support of multiple FromBody/FromForm bindings
     </PackageReleaseNotes>
