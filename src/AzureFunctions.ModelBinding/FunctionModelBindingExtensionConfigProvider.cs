@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -192,7 +193,13 @@ namespace AzureFunctions.ModelBinding
                                 }
                             }
 
-                            return null;
+                            // value provider stub
+                            return new FormValueProvider(
+                                BindingSource.Form,
+                                new FormCollection(
+                                    new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>(),
+                                    new FormFileCollection()),
+                                CultureInfo.InvariantCulture);
                         },
                     };
                 }
@@ -418,6 +425,10 @@ namespace AzureFunctions.ModelBinding
                     if (type.IsValueType)
                     {
                         return Activator.CreateInstance(type);
+                    }
+                    else if (type == typeof(IFormFileCollection))
+                    {
+                        return new FormFileCollection();
                     }
                     else
                     {
