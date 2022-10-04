@@ -33,14 +33,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.MvcModelBinding</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.5</AssemblyVersion>
-    <FileVersion>4.0.5</FileVersion>
-    <Version>4.0.5</Version>
+    <AssemblyVersion>4.0.6</AssemblyVersion>
+    <FileVersion>4.0.6</FileVersion>
+    <Version>4.0.6</Version>
     <PackageReleaseNotes>
-      - Added support of .NET 6.0
-      - Storing parsed (bound) request body in route values for later reuse
-      - Fixed issue with named parameters binding
-      - Added support of JSON values binding from IFormCollection
+      - Added support of multiple FromBody/FromForm bindings
     </PackageReleaseNotes>
   </PropertyGroup>
 
