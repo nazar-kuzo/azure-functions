@@ -1,4 +1,5 @@
-﻿using Azure.Functions.Authentication.Helpers;
+﻿using System;
+using Azure.Functions.Authentication.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.WebJobs.Host.Config;
@@ -56,13 +57,24 @@ namespace Azure.Functions.Authentication
 
             foreach (var newScheme in this.authenticationOptions.Schemes)
             {
-                authenticationOptions.AddScheme(newScheme.Name, scheme =>
+                try
                 {
-                    scheme.DisplayName = newScheme.DisplayName;
-                    scheme.HandlerType = newScheme.HandlerType;
-                });
+                    authenticationOptions.AddScheme(newScheme.Name, scheme =>
+                    {
+                        scheme.DisplayName = newScheme.DisplayName;
+                        scheme.HandlerType = newScheme.HandlerType;
+                    });
 
-                this.schemeProvider.AddScheme(newScheme.Build());
+                    this.schemeProvider.AddScheme(newScheme.Build());
+                }
+                catch (InvalidOperationException ex)
+                when (newScheme.Name == "Bearer" && ex.Message.StartsWith("Scheme already exists:"))
+                {
+
+                    throw new InvalidOperationException(
+                        "\"Bearer\" scheme name is preserved, please use the other one: \"CustomBearer\", \"B2B\", etc.",
+                        ex);
+                }
             }
         }
     }
