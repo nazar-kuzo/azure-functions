@@ -15,7 +15,7 @@ Moreover, predefined Azure Functions `AuthorizationLevel` policies wont work nei
 
 ### Root cause of a problem
 
-Please read this issue to get more context: [https://github.com/Azure/azure-functions-host/issues/6805](https://github.com/Azure/azure-functions-host/issues/6805https://).
+Please read this issue to get more context: [https://github.com/Azure/azure-functions-host/issues/6805](https://github.com/Azure/azure-functions-host/issues/6805).
 
 ### Workaround
 
@@ -35,6 +35,39 @@ Register ASP.NET Core Authentication/Authorization in such a way that it is not 
 2. Register `IAuthorizationHandler` handlers
 3. Inject all needed services `IAuthenticationSchemeProvider/IAuthorizationPolicyProvider/IPolicyEvaluator` to authenticate & authorize request inside function. Alternative, encourage you to try nice package out there to simplify this process [https://www.nuget.org/packages/DarkLoop.Azure.Functions.Authorize](https://www.nuget.org/packages/DarkLoop.Azure.Functions.Authorize)
 4. Enjoy 😄
+
+### Important
+
+```diff
+! Do not try to use the "Bearer" scheme name since it is already used by AzureFunction host internally, provide any other name like: "CustomBearer", "B2B", etc.
+```
+
+### Code snippet
+
+```c#
+    private static void ConfigureAuthorization(IFunctionsHostBuilder builder)
+    {
+        var configuration = builder.GetContext().Configuration;
+
+        builder.Services.AddFunctionAuthentication(
+            configuration,
+            defaultAuthenticationScheme: "CustomBearer");
+
+        builder.Services.AddFunctionAuthorization(
+            configuration,
+            configureDefaultPolicy: policy => policy.RequireRole("Admin"),
+            configureOptions: options =>
+            {
+                options.AddPolicy(
+                    "Organizatiuon",
+                    builder => builder
+                        .Combine(options.DefaultPolicy)
+                        .AddRequirements(new OrganizationRequirement()));
+            });
+
+        builder.Services.AddScoped<IAuthorizationHandler, OrganizationAuthorizationHandler>();
+    }
+```
 
 ## AzureFunctions.MvcModelBinding
 
