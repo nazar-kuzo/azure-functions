@@ -33,11 +33,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.Authentication</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.6</AssemblyVersion>
-    <FileVersion>4.0.6</FileVersion>
-    <Version>4.0.6</Version>
+    <AssemblyVersion>4.0.7</AssemblyVersion>
+    <FileVersion>4.0.7</FileVersion>
+    <Version>4.0.7</Version>
     <PackageReleaseNotes>
-      - Throwing exception when registering new "Bearer" scheme
+      - Replaced exception to error log in order to let app restart work properly
     </PackageReleaseNotes>
   </PropertyGroup>
 

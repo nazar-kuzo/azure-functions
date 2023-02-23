@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Azure.Functions.Authentication
@@ -17,16 +18,19 @@ namespace Azure.Functions.Authentication
         private static bool initialized = false;
 
         private readonly AuthenticationOptions authenticationOptions;
+        private readonly ILogger<FunctionAuthenticationExtensionConfigProvider> logger;
         private readonly OptionsConfigurator<AuthorizationOptions> authorizationOptionsConfigurator;
         private readonly IAuthenticationSchemeProvider schemeProvider;
         private readonly IAuthorizationPolicyProvider policyProvider;
 
         public FunctionAuthenticationExtensionConfigProvider(
+            ILogger<FunctionAuthenticationExtensionConfigProvider> logger,
             IOptions<AuthenticationOptions> authenticationOptions,
             OptionsConfigurator<AuthorizationOptions> authorizationOptionsConfigurator,
             IAuthenticationSchemeProvider schemeProvider,
             IAuthorizationPolicyProvider policyProvider)
         {
+            this.logger = logger;
             this.authenticationOptions = authenticationOptions.Value;
             this.authorizationOptionsConfigurator = authorizationOptionsConfigurator;
             this.schemeProvider = schemeProvider;
@@ -68,12 +72,16 @@ namespace Azure.Functions.Authentication
                     this.schemeProvider.AddScheme(newScheme.Build());
                 }
                 catch (InvalidOperationException ex)
-                when (newScheme.Name == "Bearer" && ex.Message.StartsWith("Scheme already exists:"))
+                when (ex.Message.StartsWith("Scheme already exists:"))
                 {
-
-                    throw new InvalidOperationException(
-                        "\"Bearer\" scheme name is preserved, please use the other one: \"CustomBearer\", \"B2B\", etc.",
-                        ex);
+                    if (newScheme.Name == "Bearer")
+                    {
+                        this.logger.LogError("\"Bearer\" scheme name is preserved, please use the other one: \"CustomBearer\", \"B2B\", etc.");
+                    }
+                    else
+                    {
+                        this.logger.LogError(ex.Message);
+                    }
                 }
             }
         }
