@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -15,6 +16,10 @@
     <DocumentationFile>Properties\Azure.Functions.Authentication.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
@@ -33,11 +38,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.Authentication</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.7</AssemblyVersion>
-    <FileVersion>4.0.7</FileVersion>
-    <Version>4.0.7</Version>
+    <AssemblyVersion>4.0.7.1</AssemblyVersion>
+    <FileVersion>4.0.7.1</FileVersion>
+    <Version>4.0.7.1</Version>
     <PackageReleaseNotes>
-      - Replaced exception to error log in order to let app restart work properly
+      - Added Source Link
     </PackageReleaseNotes>
   </PropertyGroup>
 
@@ -46,7 +51,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.32" />
+    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.37" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
