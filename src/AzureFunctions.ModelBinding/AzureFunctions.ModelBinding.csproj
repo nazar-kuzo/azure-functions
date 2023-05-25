@@ -4,6 +4,7 @@
     <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <DebugType>embedded</DebugType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -38,9 +39,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.MvcModelBinding</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.0.8.1</AssemblyVersion>
-    <FileVersion>4.0.8.1</FileVersion>
-    <Version>4.0.8.1</Version>
+    <AssemblyVersion>4.0.8.2</AssemblyVersion>
+    <FileVersion>4.0.8.2</FileVersion>
+    <Version>4.0.8.2</Version>
     <PackageReleaseNotes>
       - Added Source Link
     </PackageReleaseNotes>
