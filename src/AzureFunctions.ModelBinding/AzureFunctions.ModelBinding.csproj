@@ -41,11 +41,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>AzureFunctions.MvcModelBinding</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <AssemblyVersion>4.1.0</AssemblyVersion>
-    <FileVersion>4.1.0</FileVersion>
-    <Version>4.1.0</Version>
+    <AssemblyVersion>4.2.0</AssemblyVersion>
+    <FileVersion>4.2.0</FileVersion>
+    <Version>4.2.0</Version>
     <PackageReleaseNotes>
-      - Added Source Link
+      - Added FunctionModelBindingOptions with lifecycle hooks
     </PackageReleaseNotes>
   </PropertyGroup>
 

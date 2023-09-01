@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -62,12 +60,14 @@ namespace AzureFunctions.ModelBinding
             private readonly ParameterBinder parameterBinder;
             private readonly IModelBinderFactory modelBinderFactory;
             private readonly IModelMetadataProvider metadataProvider;
+            private readonly IOptions<FunctionModelBindingOptions> modelBindingOptions;
 
             public FunctionModelBindingSourceBindingProvider(
                 IHttpContextAccessor httpContextAccessor,
                 ParameterBinder parameterBinder,
                 IModelBinderFactory modelBinderFactory,
-                IModelMetadataProvider metadataProvider)
+                IModelMetadataProvider metadataProvider,
+                IOptions<FunctionModelBindingOptions> modelBindingOptions)
             {
                 if (metadataProvider is EmptyModelMetadataProvider)
                 {
@@ -78,6 +78,7 @@ namespace AzureFunctions.ModelBinding
                 this.parameterBinder = parameterBinder;
                 this.modelBinderFactory = modelBinderFactory;
                 this.metadataProvider = metadataProvider;
+                this.modelBindingOptions = modelBindingOptions;
             }
 
             public Task<HostBindings.IBinding> TryCreateAsync(HostBindings.BindingProviderContext context)
@@ -88,7 +89,32 @@ namespace AzureFunctions.ModelBinding
                     this.parameterBinder,
                     this.modelBinderFactory.CreateBinder(bindingSourceContext.BinderContext),
                     bindingSourceContext,
-                    this.httpContextAccessor) as HostBindings.IBinding);
+                    this.httpContextAccessor,
+                    this.modelBindingOptions) as HostBindings.IBinding);
+            }
+
+            public static Task SendFormattedResponseAsync<TContent>(
+                HttpContext httpContext,
+                TContent content,
+                int statusCode = StatusCodes.Status400BadRequest)
+            {
+                var formatterSelector = httpContext.RequestServices.GetRequiredService<OutputFormatterSelector>();
+                var writerFactory = httpContext.RequestServices.GetRequiredService<IHttpResponseStreamWriterFactory>();
+
+                var writeContext = new OutputFormatterWriteContext(
+                    httpContext,
+                    (stream, encoding) => writerFactory.CreateWriter(stream, encoding),
+                    objectType: content.GetType(),
+                    @object: content);
+
+                var formatter = formatterSelector.SelectFormatter(
+                    writeContext,
+                    httpContext.RequestServices.GetRequiredService<IOptions<MvcOptions>>().Value.OutputFormatters,
+                    new MediaTypeCollection());
+
+                httpContext.Response.StatusCode = statusCode;
+
+                return formatter.WriteAsync(writeContext);
             }
 
             private BindingSourceContext GetBindingSourceContext(HostBindings.BindingProviderContext context)
@@ -246,47 +272,26 @@ namespace AzureFunctions.ModelBinding
                 return bindingSourceContext;
             }
 
-            private static Task SendFormattedResponseAsync<TContent>(
-                HttpContext httpContext,
-                TContent content,
-                int statusCode = StatusCodes.Status400BadRequest)
-            {
-                var formatterSelector = httpContext.RequestServices.GetRequiredService<OutputFormatterSelector>();
-                var writerFactory = httpContext.RequestServices.GetRequiredService<IHttpResponseStreamWriterFactory>();
-
-                var writeContext = new OutputFormatterWriteContext(
-                    httpContext,
-                    (stream, encoding) => writerFactory.CreateWriter(stream, encoding),
-                    objectType: content.GetType(),
-                    @object: content);
-
-                var formatter = formatterSelector.SelectFormatter(
-                    writeContext,
-                    httpContext.RequestServices.GetRequiredService<IOptions<MvcOptions>>().Value.OutputFormatters,
-                    new MediaTypeCollection());
-
-                httpContext.Response.StatusCode = statusCode;
-
-                return formatter.WriteAsync(writeContext);
-            }
-
             private class BindingSourceBinding : HostBindings.IBinding
             {
                 private readonly ParameterBinder parameterBinder;
                 private readonly IModelBinder modelBinder;
                 private readonly BindingSourceContext bindingSourceContext;
                 private readonly IHttpContextAccessor httpContextAccessor;
+                private readonly IOptions<FunctionModelBindingOptions> modelBindingOptions;
 
                 public BindingSourceBinding(
                     ParameterBinder parameterBinder,
                     IModelBinder modelBinder,
                     BindingSourceContext bindingSourceContext,
-                    IHttpContextAccessor httpContextAccessor)
+                    IHttpContextAccessor httpContextAccessor,
+                    IOptions<FunctionModelBindingOptions> modelBindingOptions)
                 {
                     this.parameterBinder = parameterBinder;
                     this.modelBinder = modelBinder;
                     this.bindingSourceContext = bindingSourceContext;
                     this.httpContextAccessor = httpContextAccessor;
+                    this.modelBindingOptions = modelBindingOptions;
                 }
 
                 public bool FromAttribute => true;
@@ -335,7 +340,8 @@ namespace AzureFunctions.ModelBinding
                         this.parameterBinder,
                         this.modelBinder,
                         this.bindingSourceContext,
-                        bindingContext) as HostBindings.IValueProvider);
+                        bindingContext,
+                        this.modelBindingOptions) as HostBindings.IValueProvider);
                 }
 
                 private class BindingSourceValueProvider : HostBindings.IValueProvider
@@ -344,17 +350,20 @@ namespace AzureFunctions.ModelBinding
                     private readonly IModelBinder modelBinder;
                     private readonly BindingSourceContext bindingSourceContext;
                     private readonly ModelBindingContext modelBindingContext;
+                    private readonly IOptions<FunctionModelBindingOptions> modelBindingOptions;
 
                     public BindingSourceValueProvider(
                         ParameterBinder parameterBinder,
                         IModelBinder modelBinder,
                         BindingSourceContext bindingSourceContext,
-                        ModelBindingContext modelBindingContext)
+                        ModelBindingContext modelBindingContext,
+                        IOptions<FunctionModelBindingOptions> modelBindingOptions)
                     {
                         this.parameterBinder = parameterBinder;
                         this.modelBinder = modelBinder;
                         this.bindingSourceContext = bindingSourceContext;
                         this.modelBindingContext = modelBindingContext;
+                        this.modelBindingOptions = modelBindingOptions;
                     }
 
                     public Type Type => this.modelBindingContext.ModelType;
@@ -363,6 +372,11 @@ namespace AzureFunctions.ModelBinding
 
                     public async Task<object> GetValueAsync()
                     {
+                        if (this.modelBindingOptions.Value.OnModelBinding != null)
+                        {
+                            await this.modelBindingOptions.Value.OnModelBinding?.Invoke(this.modelBindingContext.ActionContext);
+                        }
+
                         this.modelBindingContext.Result = await this.parameterBinder.BindModelAsync(
                             this.modelBindingContext.ActionContext,
                             this.modelBinder,
@@ -393,7 +407,7 @@ namespace AzureFunctions.ModelBinding
                                 }
                             }
 
-                            // store bound request body as route paramater for later value reuse
+                            // store bound request body as route parameter for later value reuse
                             if (bindingSourceContext.BinderContext.BindingInfo.BindingSource == BindingSource.Body)
                             {
                                 this.modelBindingContext.HttpContext.Items["MS_AzureFunctions_HttpRequestBody"] = value;
@@ -403,19 +417,14 @@ namespace AzureFunctions.ModelBinding
                         }
                         else
                         {
-                            var validationProblemDetails = new ValidationProblemDetails(this.modelBindingContext.ModelState);
+                            if (this.modelBindingOptions.Value.OnModelBindingFailed != null)
+                            {
+                                await this.modelBindingOptions.Value.OnModelBindingFailed.Invoke(
+                                    this.modelBindingContext.ActionContext,
+                                    new ValidationProblemDetails(this.modelBindingContext.ModelState));
+                            }
 
-                            SendFormattedResponseAsync(
-                                this.modelBindingContext.ActionContext.HttpContext,
-                                validationProblemDetails)
-                                .GetAwaiter()
-                                .GetResult();
-
-                            var validationException = new ValidationException(validationProblemDetails.Title);
-
-                            validationException.Data.Add("Errors", validationProblemDetails);
-
-                            throw validationException;
+                            return GetDefaultValueForType(this.bindingSourceContext.Parameter.ParameterType);
                         }
                     }
                 }
