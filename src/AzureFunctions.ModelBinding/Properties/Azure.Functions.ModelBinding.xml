@@ -29,6 +29,13 @@
             Mimics MVC ModelBinding attttribute that have ability to override name
             </summary>
         </member>
+        <member name="M:AzureFunctions.ModelBinding.FunctionModelBindingExtensionConfigProvider.FunctionModelBindingSourceBindingProvider.BindingSourceBinding.BindingSourceValueProvider.GetLocalizedValidationProblemDetails(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary)">
+            <summary>
+            The only way to get localized validation problem details
+            </summary>
+            <param name="modelState">ModelStateDictionary</param>
+            <returns>Validation problem details</returns>
+        </member>
         <member name="T:AzureFunctions.ModelBinding.ModelBinding.JsonFormValueModelBinderProvider">
             <summary>
             Allows to parse JSON values from <see cref="T:Microsoft.AspNetCore.Http.IFormCollection"/>.

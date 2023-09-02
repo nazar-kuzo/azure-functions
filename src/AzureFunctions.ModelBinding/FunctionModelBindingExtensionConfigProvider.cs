@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -346,6 +347,9 @@ namespace AzureFunctions.ModelBinding
 
                 private class BindingSourceValueProvider : HostBindings.IValueProvider
                 {
+                    private static readonly MethodInfo CreateErrorDictionaryMethod = typeof(ValidationProblemDetails)
+                        .GetMethod("CreateErrorDictionary", BindingFlags.NonPublic | BindingFlags.Static);
+
                     private readonly ParameterBinder parameterBinder;
                     private readonly IModelBinder modelBinder;
                     private readonly BindingSourceContext bindingSourceContext;
@@ -374,7 +378,15 @@ namespace AzureFunctions.ModelBinding
                     {
                         if (this.modelBindingOptions.Value.OnModelBinding != null)
                         {
-                            await this.modelBindingOptions.Value.OnModelBinding?.Invoke(this.modelBindingContext.ActionContext);
+                            await this.modelBindingOptions.Value.OnModelBinding.Invoke(this.modelBindingContext.ActionContext);
+                        }
+
+                        var httpContext = this.modelBindingContext.ActionContext.HttpContext;
+
+                        if (httpContext?.Features.Get<IRequestCultureFeature>() is IRequestCultureFeature requestCultureFeature)
+                        {
+                            CultureInfo.CurrentCulture = requestCultureFeature.RequestCulture.Culture;
+                            CultureInfo.CurrentUICulture = requestCultureFeature.RequestCulture.UICulture;
                         }
 
                         this.modelBindingContext.Result = await this.parameterBinder.BindModelAsync(
@@ -421,11 +433,30 @@ namespace AzureFunctions.ModelBinding
                             {
                                 await this.modelBindingOptions.Value.OnModelBindingFailed.Invoke(
                                     this.modelBindingContext.ActionContext,
-                                    new ValidationProblemDetails(this.modelBindingContext.ModelState));
+                                    GetLocalizedValidationProblemDetails(this.modelBindingContext.ModelState));
                             }
 
                             return GetDefaultValueForType(this.bindingSourceContext.Parameter.ParameterType);
                         }
+                    }
+
+                    /// <summary>
+                    /// The only way to get localized validation problem details
+                    /// </summary>
+                    /// <param name="modelState">ModelStateDictionary</param>
+                    /// <returns>Validation problem details</returns>
+                    private static ValidationProblemDetails GetLocalizedValidationProblemDetails(ModelStateDictionary modelState)
+                    {
+                        var problemDetails = new ValidationProblemDetails();
+
+                        var errors = (IDictionary<string, string[]>) CreateErrorDictionaryMethod.Invoke(null, new[] { modelState });
+
+                        foreach (var error in errors)
+                        {
+                            problemDetails.Errors.Add(error.Key, error.Value);
+                        }
+
+                        return problemDetails;
                     }
                 }
 
