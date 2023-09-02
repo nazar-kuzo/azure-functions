@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
 using Azure.Functions.Authentication.Authorization;
 using Azure.Functions.Authentication.Helpers;
+using AzureFunctions.Authentication.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Policy;
@@ -83,28 +82,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             // difficult times require difficult decisions ©
             return policyProvider.GetFieldValue<AuthorizationOptions>("_options");
-        }
-
-        /// <summary>
-        /// Gets object's field by name through Reflection.
-        /// </summary>
-        /// <typeparam name="TValue">Value Type.</typeparam>
-        /// <param name="instance">Object intance.</param>
-        /// <param name="fieldName">Name of field.</param>
-        /// <returns>Retrieved value.</returns>
-        internal static TValue GetFieldValue<TValue>(this object instance, string fieldName)
-        {
-            if (instance == null)
-            {
-                throw new ArgumentNullException(nameof(instance));
-            }
-
-            var fieldInfo = instance
-                .GetType()
-                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .FirstOrDefault(field => field.Name == fieldName);
-
-            return (TValue) fieldInfo?.GetValue(instance);
         }
     }
 }
