@@ -1,0 +1,27 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+    "AzureFunctionsJobHost:logging:logLevel:AzureFunctions": "Trace"
+  },
+  "AuthenticationSettings": {
+    "B2C": {
+      "ClientId": "",
+      "ClientSecret": "",
+      "ApplicationIdUri": "",
+      "Domain": "",
+      "Instance": "",
+      "TenantId": "",
+      "SignUpSignInPolicyId": "",
+      "UserScope": ""
+    }
+  },
+  "ConnectionStrings": {
+  },
+  "Host": {
+    "CORS": "*",
+    "CORSCredentials": false
+  }
+}
