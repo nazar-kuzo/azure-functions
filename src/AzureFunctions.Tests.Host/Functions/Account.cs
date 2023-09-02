@@ -26,5 +26,13 @@ namespace AzureFunctions.Tests.Host.Functions
                 Name = user.FindFirst("name").Value,
             };
         }
+
+        [AllowAnonymous]
+        [FunctionName(nameof(Account) + "-" + nameof(Login))]
+        public object Login(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "account/login")] HttpRequest request)
+        {
+            return "Nice try";
+        }
     }
 }

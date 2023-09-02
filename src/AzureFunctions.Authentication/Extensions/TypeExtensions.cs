@@ -8,7 +8,7 @@ namespace AzureFunctions.Authentication.Extensions
 {
     internal static class TypeExtensions
     {
-        private static readonly ConcurrentDictionary<Type, MemberInfo[]> TypeMembers = new ConcurrentDictionary<Type, MemberInfo[]>();
+        private static readonly ConcurrentDictionary<Type, MemberInfo[]> TypeMembers = new();
 
         /// <summary>
         /// Gets object's property by name through Reflection.
