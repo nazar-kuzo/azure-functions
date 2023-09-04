@@ -1,10 +1,10 @@
 ﻿using System;
-using Azure.Functions.Authentication.Authorization;
-using Azure.Functions.Authentication.Helpers;
 using AzureFunctions.Authentication.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Policy;
+using AzureFunctions.Authentication.Authorization;
+using AzureFunctions.Authentication.Helpers;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -68,13 +68,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton(new OptionsConfigurator<AuthorizationOptions> { Configure = configure });
 
             return services;
-        }
-
-        internal static AuthenticationOptions GetAuthenticationOptions(
-            this IAuthenticationSchemeProvider schemeProvider)
-        {
-            // difficult times require difficult decisions ©
-            return schemeProvider.GetFieldValue<AuthenticationOptions>("_options");
         }
 
         internal static AuthorizationOptions GetAuthorizationOptions(

@@ -7,6 +7,7 @@ using AzureFunctions.Extensions.Swashbuckle.Settings;
 using AzureFunctions.Tests.Host.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -141,6 +142,14 @@ namespace AzureFunctions.Tests.Host
                     jsonOptions.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     jsonOptions.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                 });
+
+            builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddFunctionMiddleware(app =>
+            {
+                app.UseAuthentication();
+                app.UseAuthorization();
+            });
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

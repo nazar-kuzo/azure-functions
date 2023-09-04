@@ -297,7 +297,7 @@ namespace AzureFunctions.ModelBinding
 
                 public bool FromAttribute => true;
 
-                public ParameterDescriptor ToParameterDescriptor() => new ParameterDescriptor();
+                public ParameterDescriptor ToParameterDescriptor() => new();
 
                 public Task<HostBindings.IValueProvider> BindAsync(object value, HostBindings.ValueBindingContext context)
                 {
@@ -310,8 +310,7 @@ namespace AzureFunctions.ModelBinding
 
                     // remove value from route data to force explicit attribute binding
                     if (this.bindingSourceContext.Source == BindingSource.Path &&
-                        this.httpContextAccessor.HttpContext.Items["MS_AzureWebJobs_HttpRouteData"] is Dictionary<string, object> routeData &&
-                        routeData.ContainsKey(this.bindingSourceContext.ParameterName))
+                        this.httpContextAccessor.HttpContext.Items["MS_AzureWebJobs_HttpRouteData"] is Dictionary<string, object> routeData)
                     {
                         routeData.Remove(this.bindingSourceContext.ParameterName);
                     }
@@ -397,7 +396,7 @@ namespace AzureFunctions.ModelBinding
                             {
                                 Name = this.modelBindingContext.ModelName,
                                 ParameterType = this.modelBindingContext.ModelType,
-                                BindingInfo = bindingSourceContext.BinderContext.BindingInfo,
+                                BindingInfo = this.bindingSourceContext.BinderContext.BindingInfo,
                             },
                             this.modelBindingContext.ModelMetadata,
                             value: null);
@@ -420,7 +419,7 @@ namespace AzureFunctions.ModelBinding
                             }
 
                             // store bound request body as route parameter for later value reuse
-                            if (bindingSourceContext.BinderContext.BindingInfo.BindingSource == BindingSource.Body)
+                            if (this.bindingSourceContext.BinderContext.BindingInfo.BindingSource == BindingSource.Body)
                             {
                                 this.modelBindingContext.HttpContext.Items["MS_AzureFunctions_HttpRequestBody"] = value;
                             }

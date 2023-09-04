@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Azure.Functions.Authentication.Helpers
+namespace AzureFunctions.Authentication.Helpers
 {
     /// <summary>
     /// Registers configure action for specified Options class

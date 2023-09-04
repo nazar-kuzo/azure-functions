@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Azure.Functions.Authentication.Authorization
+namespace AzureFunctions.Authentication.Authorization
 {
     /// <summary>
     /// Combines default Azure Function authorization handler with custom application authorization handler

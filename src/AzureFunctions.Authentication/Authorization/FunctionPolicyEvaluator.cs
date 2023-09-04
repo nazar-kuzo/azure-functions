@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Azure.Functions.Authentication.Authorization
+namespace AzureFunctions.Authentication.Authorization
 {
     /// <summary>
     /// Overrides default policy evaluator to pass combined default and application authorization handlers.
@@ -50,12 +50,7 @@ namespace Azure.Functions.Authentication.Authorization
 
         private static IOptions<AuthorizationOptions> GetAuthorizationOptions(IAuthorizationPolicyProvider policyProvider)
         {
-            if (AuthorizationOptions == null)
-            {
-                AuthorizationOptions = Options.Create(policyProvider.GetAuthorizationOptions());
-            }
-
-            return AuthorizationOptions;
+            return AuthorizationOptions ??= Options.Create(policyProvider.GetAuthorizationOptions());
         }
     }
 }

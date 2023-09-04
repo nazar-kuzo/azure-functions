@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions.ModelBinding
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6487E443-13EA-4FC2-AD5B-CD1D9E20E307}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctions.Tests.Host", "AzureFunctions.Tests.Host\AzureFunctions.Tests.Host.csproj", "{4D8D4D96-10E3-41F4-9CA5-2F0CC35D2E59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions.Tests.Host", "AzureFunctions.Tests.Host\AzureFunctions.Tests.Host.csproj", "{4D8D4D96-10E3-41F4-9CA5-2F0CC35D2E59}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{05B64D73-4D3D-4BA6-928E-FB16C87B88E7}"
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
 		..\.gitignore = ..\.gitignore
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctions.Middleware", "AzureFunctions.Middleware\AzureFunctions.Middleware.csproj", "{F4FC57EA-739B-4BDE-A462-384BFC1D3F68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{4D8D4D96-10E3-41F4-9CA5-2F0CC35D2E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D8D4D96-10E3-41F4-9CA5-2F0CC35D2E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D8D4D96-10E3-41F4-9CA5-2F0CC35D2E59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4FC57EA-739B-4BDE-A462-384BFC1D3F68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4FC57EA-739B-4BDE-A462-384BFC1D3F68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4FC57EA-739B-4BDE-A462-384BFC1D3F68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4FC57EA-739B-4BDE-A462-384BFC1D3F68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

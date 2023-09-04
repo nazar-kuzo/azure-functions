@@ -1,5 +1,6 @@
 ﻿using System;
-using Azure.Functions.Authentication.Helpers;
+using AzureFunctions.Authentication.Extensions;
+using AzureFunctions.Authentication.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.WebJobs.Host.Config;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Azure.Functions.Authentication
+namespace AzureFunctions.Authentication
 {
     /// <summary>
     /// Extension that registers custom authentication scheme after application finished bootstrap.
@@ -46,7 +47,7 @@ namespace Azure.Functions.Authentication
 
             initialized = true;
 
-            var authenticationOptions = this.schemeProvider.GetAuthenticationOptions();
+            var authenticationOptions = this.schemeProvider.GetFieldValue<AuthenticationOptions>("_options");
 
             authenticationOptions.DefaultAuthenticateScheme = this.authenticationOptions.DefaultAuthenticateScheme;
             authenticationOptions.DefaultChallengeScheme = this.authenticationOptions.DefaultChallengeScheme;

@@ -42,6 +42,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\AzureFunctions.Authentication\AzureFunctions.Authentication.csproj" />
+    <ProjectReference Include="..\AzureFunctions.Middleware\AzureFunctions.Middleware.csproj" />
     <ProjectReference Include="..\AzureFunctions.ModelBinding\AzureFunctions.ModelBinding.csproj" />
   </ItemGroup>
 
