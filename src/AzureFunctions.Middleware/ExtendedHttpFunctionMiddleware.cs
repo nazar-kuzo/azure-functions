@@ -64,6 +64,8 @@ namespace AzureFunctions.Middleware
             await SetEndpoint(context);
 
             await application.Invoke(context);
+
+            await next(context);
         }
 
         private async Task SetEndpoint(HttpContext context)
